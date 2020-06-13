@@ -6,5 +6,9 @@ app = Flask(__name__)
 def index():
     return 'Hello Flask'
 
+@app.route('/blog')
+def blog():
+    return 'Ini blog'
+
 
 app.run('0.0.0.0', debug=True)
