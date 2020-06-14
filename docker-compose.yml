@@ -19,7 +19,7 @@ services:
     image: 'postgres:9.5'
     environment:
       POSTGRES_USER: 'devuser'
-      POSTGRES_PASSWORD: 'c'
+      POSTGRES_PASSWORD: 'devpassword'
     volumes:
       - 'postgres:/var/lib/postgresql/data'
     ports:
