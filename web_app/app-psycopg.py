@@ -1,21 +1,10 @@
 from flask import Flask, render_template
 import psycopg2
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
-
-    db = SQLAlchemy(app)
-
-    class Page(db.Model):
-        __tablename__ = 'page'
-        id = Column(Integer, primary_key=True)
-        contents = Column(String)
-
-    db.create_all()
 
     @app.route('/')
     def index():
@@ -41,8 +30,8 @@ def create_app():
         cur = con.cursor()
         cur.execute('select * from page;')
 
-        id, contents = cur.fetchone()
+        id, title = cur.fetchone()
         con.close()
-        return 'Output DB: {} - {}'.format(id, contents)
+        return 'Output DB: {} - {}'.format(id, title)
 
     return app
