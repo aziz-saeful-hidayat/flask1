@@ -4,6 +4,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from web_app.models import db, Page, Menu
+from web_app.views import PageModelView
 
 
 def create_app():
@@ -13,7 +14,7 @@ def create_app():
     db.init_app(app)
 
     admin = Admin(app, name='Flask01', template_mode='bootstrap3')
-    admin.add_view(ModelView(Page, db.session))
+    admin.add_view(PageModelView(Page, db.session))
     admin.add_view(ModelView(Menu, db.session))
 
     @app.route('/')
