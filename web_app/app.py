@@ -1,31 +1,19 @@
 from flask import Flask, render_template
 import psycopg2
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String
+
+from web_app.models import db, Page
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
 
-    db = SQLAlchemy(app)
-
-    class Page(db.Model):
-        __tablename__ = 'page'
-        id = Column(Integer, primary_key=True)
-        contents = Column(String)
-
-    db.create_all()
+    db.init_app(app)
 
     @app.route('/')
     def index():
-        con = psycopg2.connect('dbname=flask01 user=devuser password=devpassword host=postgres')
-        cur = con.cursor()
-        cur.execute('select contents from page where id = 1;')
-
-        contents = cur.fetchone() #mengembalikan tupple.
-        con.close()
-        return render_template('index.html', TITLE='Flask-01', CONTENT=contents[0])
+        page = Page.query.filter_by(id=1).first()
+        return render_template('index.html', TITLE='Flask-01', CONTENT=page.contents)
 
     @app.route('/blog')
     def blog():
