@@ -1,8 +1,8 @@
-"""Adding page table
+"""initial db
 
-Revision ID: 0eb01c197d66
+Revision ID: 66a0c98b62cd
 Revises: 
-Create Date: 2020-06-16 00:28:45.928324
+Create Date: 2020-06-16 01:06:25.258798
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0eb01c197d66'
+revision = '66a0c98b62cd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,6 +21,7 @@ def upgrade():
     op.create_table('page',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
+    sa.Column('tag', sa.String(), nullable=True),
     sa.Column('contents', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
