@@ -1,7 +1,9 @@
 from flask import Flask, render_template
 import psycopg2
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
-from web_app.models import db, Page
+from web_app.models import db, Page, Menu
 
 
 def create_app():
@@ -10,27 +12,25 @@ def create_app():
 
     db.init_app(app)
 
+    admin = Admin(app, name='Flask01', template_mode='bootstrap3')
+    admin.add_view(ModelView(Page, db.session))
+    admin.add_view(ModelView(Menu, db.session))
+
     @app.route('/')
-    def index():
-        page = Page.query.filter_by(id=1).first()
-        return render_template('index.html', TITLE='Flask-01', CONTENT=page.contents)
+    @app.route('/<url>')
+    def index(url=None):
+        if url is not None:
+            page = Page.query.filter_by(url=url).first()
+
+        contents = 'empty'
+        if page is not None:
+            contents = page.contents
+
+        menu = Menu.query.order_by('order')
+        return render_template('index.html', TITLE='Flask-01', CONTENT=contents, menu=menu)
 
     @app.route('/blog')
     def blog():
         return 'Ini blog'
-
-    @app.route('/about')
-    def about():
-        return render_template('about.html', TITLE='About me')
-
-    @app.route('/testdb')
-    def testdb():
-        con = psycopg2.connect('dbname=flask01 user=devuser password=devpassword host=postgres')
-        cur = con.cursor()
-        cur.execute('select * from page;')
-
-        id, contents = cur.fetchone()
-        con.close()
-        return 'Output DB: {} - {}'.format(id, contents)
 
     return app

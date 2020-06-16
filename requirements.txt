@@ -3,3 +3,5 @@ gunicorn
 psycopg2
 flask-sqlalchemy
 alembic
+flask-admin
+flask-wtf
